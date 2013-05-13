@@ -1,0 +1,6 @@
+*class
+build/
+lib/
+dist/
+*pdf
+*odt
