@@ -1,9 +1,12 @@
 package gt.dvdyzag.gui;
 
 import gt.dvdyzag.db.PostgreSQL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,11 +31,7 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
-        jbConectar = new javax.swing.JButton();
-        jbLimpiar = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        jp1 = new javax.swing.JPanel();
         jpUserInput = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jtfURL = new javax.swing.JTextField();
@@ -44,54 +43,23 @@ public class Principal extends javax.swing.JFrame {
         jsPuerto = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
         jtfNombreBD = new javax.swing.JTextField();
-        jlURLOK = new javax.swing.JLabel();
-        jlNombreBDOK = new javax.swing.JLabel();
-        jlNombreUsuario = new javax.swing.JLabel();
-        jlContrasena = new javax.swing.JLabel();
+        jpControl1 = new javax.swing.JPanel();
+        jbConectar = new javax.swing.JButton();
+        jbLimpiar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jlMsgConn = new javax.swing.JLabel();
+        jlTitulo1 = new javax.swing.JLabel();
+        jp2 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        jpControl2 = new javax.swing.JPanel();
+        jbAceptarTabla = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        jbConectar.setText("Conectar");
-        jbConectar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbConectarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipady = 5;
-        jPanel1.add(jbConectar, gridBagConstraints);
-
-        jbLimpiar.setText("Limpiar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipady = 5;
-        jPanel1.add(jbLimpiar, gridBagConstraints);
-
-        jLabel5.setText("Estado:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel1.add(jLabel5, gridBagConstraints);
-
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel6.setText("Listo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 4);
-        jPanel1.add(jLabel6, gridBagConstraints);
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+        jp1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jp1.setLayout(new java.awt.BorderLayout());
 
         jpUserInput.setLayout(new java.awt.GridBagLayout());
 
@@ -170,32 +138,94 @@ public class Principal extends javax.swing.JFrame {
         gridBagConstraints.ipady = 2;
         jpUserInput.add(jtfNombreBD, gridBagConstraints);
 
-        jlURLOK.setText("OK");
+        jp1.add(jpUserInput, java.awt.BorderLayout.CENTER);
+
+        jpControl1.setLayout(new java.awt.GridBagLayout());
+
+        jbConectar.setText("Conectar");
+        jbConectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbConectarActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipady = 5;
+        jpControl1.add(jbConectar, gridBagConstraints);
+
+        jbLimpiar.setText("Limpiar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 5;
+        jpControl1.add(jbLimpiar, gridBagConstraints);
+
+        jLabel5.setText("Estado:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jpUserInput.add(jlURLOK, gridBagConstraints);
+        jpControl1.add(jLabel5, gridBagConstraints);
 
-        jlNombreBDOK.setText("OK");
+        jlMsgConn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jlMsgConn.setText("Listo");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        jpUserInput.add(jlNombreBDOK, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 4);
+        jpControl1.add(jlMsgConn, gridBagConstraints);
 
-        jlNombreUsuario.setText("OK");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        jpUserInput.add(jlNombreUsuario, gridBagConstraints);
+        jp1.add(jpControl1, java.awt.BorderLayout.SOUTH);
 
-        jlContrasena.setText("OK");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        jpUserInput.add(jlContrasena, gridBagConstraints);
+        jlTitulo1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jlTitulo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlTitulo1.setText("Datos de la conexión DB PostgreSQL");
+        jlTitulo1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jp1.add(jlTitulo1, java.awt.BorderLayout.NORTH);
 
-        getContentPane().add(jpUserInput, java.awt.BorderLayout.CENTER);
+        jp2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jp2.setLayout(new java.awt.BorderLayout());
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Elija una Tabla");
+        jp2.add(jLabel6, java.awt.BorderLayout.NORTH);
+
+        jScrollPane1.setViewportView(jList1);
+
+        jp2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jpControl2.setLayout(new java.awt.BorderLayout());
+
+        jbAceptarTabla.setText("Aceptar Tabla");
+        jpControl2.add(jbAceptarTabla, java.awt.BorderLayout.LINE_END);
+
+        jp2.add(jpControl2, java.awt.BorderLayout.SOUTH);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jp1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jp2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jp2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jp1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -206,11 +236,19 @@ public class Principal extends javax.swing.JFrame {
                 jtfNombreBD.getText(), 
                 jtfNombreUsuario.getText(), 
                 String.valueOf(jtfContrasena.getPassword()));
+                jlMsgConn.setText("Conectado a " + psql.getDbName());
         try {
             psql.connDB();
-        } catch (SQLException ex) {
-            System.out.println("some sort of sqlexception");
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            ResultSet rs = psql.runQuery(PostgreSQL.consultaTablas);
+            // http://stackoverflow.com/questions/12134823/displaying-data-from-database-in-jlist
+            DefaultListModel<String> dlm = new DefaultListModel<>();
+            while (rs.next()) {
+                dlm.addElement(rs.getString("table_name"));
+            }
+            jList1.setModel(dlm);
+        } catch (SQLException | ClassNotFoundException ex) {
+            jlMsgConn.setText("ha ocurrido un error");
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de conexión", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbConectarActionPerformed
 
@@ -222,14 +260,18 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JList jList1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbAceptarTabla;
     private javax.swing.JButton jbConectar;
     private javax.swing.JButton jbLimpiar;
-    private javax.swing.JLabel jlContrasena;
-    private javax.swing.JLabel jlNombreBDOK;
-    private javax.swing.JLabel jlNombreUsuario;
+    private javax.swing.JLabel jlMsgConn;
     private javax.swing.JLabel jlPuerto;
-    private javax.swing.JLabel jlURLOK;
+    private javax.swing.JLabel jlTitulo1;
+    private javax.swing.JPanel jp1;
+    private javax.swing.JPanel jp2;
+    private javax.swing.JPanel jpControl1;
+    private javax.swing.JPanel jpControl2;
     private javax.swing.JPanel jpUserInput;
     private javax.swing.JSpinner jsPuerto;
     private javax.swing.JPasswordField jtfContrasena;

@@ -4,7 +4,7 @@ import gt.dvdyzag.gui.Principal;
 import javax.swing.SwingUtilities;
 
 /**
- * -Dswing.defaultlaf=javax.swing.plaf.nimbus.NimbusLookAndFeel
+ * 
  * @author David Y. Gonzalez <a href="mailto:dvdyzag@gmail.com">dvdyzag@gmail.com</a>
  */
 public class Normalizer implements Runnable{
