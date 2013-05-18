@@ -4,3 +4,5 @@ lib/
 dist/
 *pdf
 *odt
+javadoc/
+jar/

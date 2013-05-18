@@ -74,7 +74,9 @@ public class PostgreSQL {
         this.username = username;
         this.password = password;
     }
-    
+    /**
+     * Abre la conexion
+     **/
     public void connDB() throws SQLException, ClassNotFoundException{
         Class.forName("org.postgresql.Driver");
         String validUrl = getConnString();
@@ -83,16 +85,27 @@ public class PostgreSQL {
         }
         conn = DriverManager.getConnection(validUrl, this.username, this.password);
     }
+    /**
+     * Ejecuta sentencias SQL
+     * @param query Sentencia SQL
+     **/
     public ResultSet runQuery(String query) throws SQLException{
         PreparedStatement ps = conn.prepareStatement(query);
         return ps.executeQuery();
     }
+    /**
+     * Cierra la conexion
+     **/
     public void cerrar(){
         try {
             conn.close();
         } catch (Exception e) {
         }
     }
+    /**
+     * Devuelve la cadena de conexion, segun los atributos de la clase
+     * @return String
+     **/
     public String getConnString(){
         return String.format(variableConnString, this.url, this.port, this.dbName);
     }

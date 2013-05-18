@@ -4,7 +4,7 @@ import gt.dvdyzag.gui.Principal;
 import javax.swing.SwingUtilities;
 
 /**
- * 
+ * Clase central
  * @author David Y. Gonzalez <a href="mailto:dvdyzag@gmail.com">dvdyzag@gmail.com</a>
  */
 public class Normalizer implements Runnable{

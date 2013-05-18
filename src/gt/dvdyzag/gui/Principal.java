@@ -1,12 +1,12 @@
 package gt.dvdyzag.gui;
 
 import gt.dvdyzag.db.PostgreSQL;
+import gt.dvdyzag.db.objetos.Tabla;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class Principal extends javax.swing.JFrame {
 
+    private PostgreSQL psql;
     /**
      * Creates new form Principal
      */
@@ -52,11 +53,14 @@ public class Principal extends javax.swing.JFrame {
         jp2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jlTablas = new javax.swing.JList();
         jpControl2 = new javax.swing.JPanel();
         jbAceptarTabla = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtColumnas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Normalizer");
 
         jp1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jp1.setLayout(new java.awt.BorderLayout());
@@ -195,16 +199,32 @@ public class Principal extends javax.swing.JFrame {
         jLabel6.setText("Elija una Tabla");
         jp2.add(jLabel6, java.awt.BorderLayout.NORTH);
 
-        jScrollPane1.setViewportView(jList1);
+        jlTablas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(jlTablas);
 
         jp2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jpControl2.setLayout(new java.awt.BorderLayout());
 
         jbAceptarTabla.setText("Aceptar Tabla");
+        jbAceptarTabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAceptarTablaActionPerformed(evt);
+            }
+        });
         jpControl2.add(jbAceptarTabla, java.awt.BorderLayout.LINE_END);
 
         jp2.add(jpControl2, java.awt.BorderLayout.SOUTH);
+
+        jtColumnas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Tipo", "Null", "Longitud maxima", "Precisión numérica"
+            }
+        ));
+        jScrollPane2.setViewportView(jtColumnas);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,9 +232,13 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jp1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jp2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jp1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jp2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -224,14 +248,16 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jp2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jp1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConectarActionPerformed
-        PostgreSQL psql = new PostgreSQL(jtfURL.getText(), 
+        psql = new PostgreSQL(jtfURL.getText(), 
                 (Integer)jsPuerto.getValue(), 
                 jtfNombreBD.getText(), 
                 jtfNombreUsuario.getText(), 
@@ -245,12 +271,38 @@ public class Principal extends javax.swing.JFrame {
             while (rs.next()) {
                 dlm.addElement(rs.getString("table_name"));
             }
-            jList1.setModel(dlm);
+            jlTablas.setModel(dlm);
         } catch (SQLException | ClassNotFoundException ex) {
             jlMsgConn.setText("ha ocurrido un error");
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de conexión", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbConectarActionPerformed
+
+    private void jbAceptarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAceptarTablaActionPerformed
+        String tabla = (String)jlTablas.getSelectedValue();
+        if (tabla == null){
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado tabla alguna", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            DefaultTableModel dtm = (DefaultTableModel) jtColumnas.getModel();
+            dtm.setRowCount(0);
+            Tabla t = new Tabla(tabla, psql);
+            ResultSet rs = t.getRs();
+            while(rs.next()){
+                dtm.insertRow(jtColumnas.getRowCount(), new Object[]{
+                    rs.getString("column_name"),
+                    rs.getString("data_type"),
+                    rs.getString("is_nullable"),
+                    rs.getString("max_length"),
+                    rs.getString("precision")
+                });
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de conexión", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jbAceptarTablaActionPerformed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -260,13 +312,14 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbAceptarTabla;
     private javax.swing.JButton jbConectar;
     private javax.swing.JButton jbLimpiar;
     private javax.swing.JLabel jlMsgConn;
     private javax.swing.JLabel jlPuerto;
+    private javax.swing.JList jlTablas;
     private javax.swing.JLabel jlTitulo1;
     private javax.swing.JPanel jp1;
     private javax.swing.JPanel jp2;
@@ -274,6 +327,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jpControl2;
     private javax.swing.JPanel jpUserInput;
     private javax.swing.JSpinner jsPuerto;
+    private javax.swing.JTable jtColumnas;
     private javax.swing.JPasswordField jtfContrasena;
     private javax.swing.JTextField jtfNombreBD;
     private javax.swing.JTextField jtfNombreUsuario;
