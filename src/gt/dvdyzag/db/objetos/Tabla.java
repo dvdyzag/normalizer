@@ -3,7 +3,6 @@ package gt.dvdyzag.db.objetos;
 import gt.dvdyzag.db.PostgreSQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * 

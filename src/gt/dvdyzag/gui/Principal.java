@@ -46,7 +46,6 @@ public class Principal extends javax.swing.JFrame {
         jtfNombreBD = new javax.swing.JTextField();
         jpControl1 = new javax.swing.JPanel();
         jbConectar = new javax.swing.JButton();
-        jbLimpiar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jlMsgConn = new javax.swing.JLabel();
         jlTitulo1 = new javax.swing.JLabel();
@@ -158,13 +157,6 @@ public class Principal extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipady = 5;
         jpControl1.add(jbConectar, gridBagConstraints);
-
-        jbLimpiar.setText("Limpiar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipady = 5;
-        jpControl1.add(jbLimpiar, gridBagConstraints);
 
         jLabel5.setText("Estado:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -316,7 +308,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbAceptarTabla;
     private javax.swing.JButton jbConectar;
-    private javax.swing.JButton jbLimpiar;
     private javax.swing.JLabel jlMsgConn;
     private javax.swing.JLabel jlPuerto;
     private javax.swing.JList jlTablas;
